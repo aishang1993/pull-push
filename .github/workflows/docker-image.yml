@@ -23,4 +23,3 @@ jobs:
         docker build . --file Dockerfile --tag registry.cn-shenzhen.aliyuncs.com/public-x/hanlp-jupyterlab
         # 推送镜像到镜像仓库
         docker push registry.cn-shenzhen.aliyuncs.com/public-x/hanlp-jupyterlab
-。

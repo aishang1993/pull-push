@@ -1,0 +1,55 @@
+name: Pull and Push Docker Image
+
+on:
+  workflow_dispatch:
+    inputs:
+      src_image:
+        description: '请填写docker镜像名称'
+        required: true
+        default: 'alpine:latest'  # 设置默认的 Docker 镜像名称
+      desc_image:
+        description: '请填写docker镜像名称'
+        required: false
+        default: 'alpine:latest'  # 设置默认的 Docker 镜像名称
+
+jobs:
+  pull-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Clean up Docker to free space
+      run: |
+        docker system prune -a -f
+        docker volume prune -f
+
+    - name: Pull Docker Image and Package
+      run: |
+        image="${{ github.event.inputs.src_image }}"
+        docker pull "${image}" --platform "linux/amd64"
+
+    - name: Login to Docker Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ secrets.DOCKER_REGISTRY }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+
+    - name: Set default desc_image if not provided
+      id: set_desc_image
+      run: |        if [ -z "${{ github.event.inputs.desc_image }}" ]; then
+          echo "::set-output name=desc_image::${{ github.event.inputs.src_image }}"
+        else
+          echo "::set-output name=desc_image::${{ github.event.inputs.desc_image }}"
+        fi
+
+    - name: Push Image to Docker Registry
+      run: |
+        image="${{ secrets.DOCKER_REGISTRY }}/${{ steps.set_desc_image.desc_image }}"
+        docker tag "${{ github.event.inputs.src_image }}" "${image}"
+        docker push "${image}"
+
+    - name: Logout from Docker Registry
+      run: docker logout ${{ secrets.DOCKER_REGISTRY }}

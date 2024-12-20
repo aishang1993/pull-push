@@ -35,7 +35,7 @@ jobs:
         fi
     - name: Print desc_image output
       run: |      
-        echo "desc_image: ${{ secrets.DOCKER_REGISTRY }}/${{ steps.set_desc_image.desc_image }}"
+        echo "desc_image: /${{ steps.set_desc_image.desc_image }}"
         
     - name: Pull Docker Image and Package
       run: |

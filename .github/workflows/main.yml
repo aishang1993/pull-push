@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       src_image:
-        description: '请填写docker镜像名称'
+        description: '请填写源docker镜像名称'
         required: true
         default: 'alpine:latest'  # 设置默认的 Docker 镜像名称
       desc_image:
-        description: '请填写docker镜像名称'
+        description: '请填写目标docker镜像名称'
         required: false
         default: 'alpine:latest'  # 设置默认的 Docker 镜像名称
 

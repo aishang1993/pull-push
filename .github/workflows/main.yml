@@ -25,6 +25,18 @@ jobs:
         docker system prune -a -f
         docker volume prune -f
 
+    - name: Set default desc_image if not provided
+      id: set_desc_image
+      run: |        
+        if [ -z "${{ github.event.inputs.desc_image }}" ]; then
+          echo "::set-output name=desc_image::${{ github.event.inputs.src_image }}"
+        else
+          echo "::set-output name=desc_image::${{ github.event.inputs.desc_image }}"
+        fi
+    - name: Print desc_image output
+      run: |      
+        echo "desc_image: ${{ secrets.DOCKER_REGISTRY }}/${{ steps.set_desc_image.desc_image }}"
+        
     - name: Pull Docker Image and Package
       run: |
         image="${{ github.event.inputs.src_image }}"
@@ -36,15 +48,6 @@ jobs:
         registry: ${{ secrets.DOCKER_REGISTRY }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
-
-    - name: Set default desc_image if not provided
-      id: set_desc_image
-      run: |        
-        if [ -z "${{ github.event.inputs.desc_image }}" ]; then
-          echo "::set-output name=desc_image::${{ github.event.inputs.src_image }}"
-        else
-          echo "::set-output name=desc_image::${{ github.event.inputs.desc_image }}"
-        fi
 
     - name: Push Image to Docker Registry
       run: |

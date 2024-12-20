@@ -39,7 +39,8 @@ jobs:
 
     - name: Set default desc_image if not provided
       id: set_desc_image
-      run: |        if [ -z "${{ github.event.inputs.desc_image }}" ]; then
+      run: |        
+        if [ -z "${{ github.event.inputs.desc_image }}" ]; then
           echo "::set-output name=desc_image::${{ github.event.inputs.src_image }}"
         else
           echo "::set-output name=desc_image::${{ github.event.inputs.desc_image }}"

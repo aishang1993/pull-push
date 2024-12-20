@@ -39,7 +39,7 @@ jobs:
 
     - name: Push Image to Docker Registry
       run: |
-        image="${{ secrets.DOCKER_REGISTRY }}/${{ steps.set_desc_image.desc_image }}"
+        image="${{ secrets.DOCKER_REGISTRY }}/${{ github.event.inputs.desc_image }}"
         docker tag "${{ github.event.inputs.src_image }}" "${image}"
         docker push "${image}"
 

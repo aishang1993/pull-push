@@ -9,7 +9,7 @@ on:
         default: 'alpine:latest'  # 设置默认的 Docker 镜像名称
       desc_image:
         description: '请填写目标docker镜像名称'
-        required: false
+        required: true
         default: 'alpine:latest'  # 设置默认的 Docker 镜像名称
 
 jobs:
